@@ -715,6 +715,220 @@ function ServicesPage({ navigate }) {
 }
 
 /* ---------------------------------------------------------------
+   PRICING PAGE
+---------------------------------------------------------------- */
+
+function SubscriptionPage({ navigate }) {
+  const [faqOpen, setFaqOpen] = useState(0);
+
+  const PLANS = [
+    {
+      name: "Free",
+      price: "₹0",
+      period: "forever",
+      features: [
+        "5 resume uploads / month",
+        "Basic ATS analysis",
+        "Single role comparison",
+        "Email support"
+      ],
+      cta: "Start Free",
+      highlight: false
+    },
+    {
+      name: "Pro",
+      price: "₹499",
+      period: "/month",
+      features: [
+        "100 resume uploads / month",
+        "Full AI ranking engine",
+        "Keyword suggestions",
+        "Candidate comparison dashboard",
+        "Priority email support"
+      ],
+      cta: "Upgrade to Pro",
+      highlight: true
+    },
+    {
+      name: "Premium",
+      price: "₹999",
+      period: "/month",
+      features: [
+        "Unlimited resume uploads",
+        "Advanced AI analysis suite",
+        "Team access (up to 10 seats)",
+        "AI hiring assistant",
+        "Dedicated support"
+      ],
+      cta: "Go Premium",
+      highlight: false
+    }
+  ];
+
+  const FAQS = [
+    {
+      q: "How does AI rank resumes?",
+      a: "AI reads skills, experience, projects and compares with job description."
+    },
+    {
+      q: "Is my data secure?",
+      a: "Yes, all uploads are encrypted and never shared."
+    },
+    {
+      q: "Can I cancel anytime?",
+      a: "Yes, you can upgrade or cancel anytime."
+    }
+  ];
+
+  return (
+    <Section style={{ paddingTop: 70 }}>
+      <PageHeader
+        eyebrow="Pricing"
+        title="Simple pricing for teams of every size"
+        sub="Indian pricing, billed in rupees. Upgrade anytime."
+      />
+
+      {/* PLANS */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+          gap: 24,
+          maxWidth: 1000,
+          margin: "0 auto"
+        }}
+      >
+        {PLANS.map((p, i) => (
+          <div
+            key={i}
+            className="ra-card"
+            style={{
+              borderRadius: 20,
+              padding: 32,
+              position: "relative",
+              border: p.highlight
+                ? "1.5px solid var(--primary)"
+                : "1px solid var(--border)",
+              transform: p.highlight ? "scale(1.03)" : "none"
+            }}
+          >
+            {p.highlight && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: -13,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  background:
+                    "linear-gradient(90deg,var(--primary),var(--secondary))",
+                  padding: "5px 16px",
+                  borderRadius: 999,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#fff"
+                }}
+              >
+                MOST POPULAR
+              </div>
+            )}
+
+            <div
+              className="ra-display"
+              style={{ fontWeight: 700, fontSize: 20 }}
+            >
+              {p.name}
+            </div>
+
+            <div style={{ margin: "16px 0" }}>
+              <span
+                className="ra-display"
+                style={{ fontSize: 38, fontWeight: 800 }}
+              >
+                {p.price}
+              </span>
+              <span style={{ color: "var(--text-muted)" }}>
+                {" "}
+                {p.period}
+              </span>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {p.features.map((f, j) => (
+                <div
+                  key={j}
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    fontSize: 14
+                  }}
+                >
+                  <CheckCircle2 size={16} color="var(--accent)" />
+                  {f}
+                </div>
+              ))}
+            </div>
+
+            <button
+              className={p.highlight ? "ra-btn-primary" : "ra-btn-secondary"}
+              style={{
+                width: "100%",
+                marginTop: 20,
+                padding: "12px",
+                borderRadius: 10
+              }}
+              onClick={() => navigate("register")}
+            >
+              {p.cta}
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* FAQ */}
+      <div style={{ marginTop: 60 }}>
+        <PageHeader title="Frequently Asked Questions" />
+
+        <div style={{ marginTop: 20 }}>
+          {FAQS.map((faq, i) => (
+            <div
+              key={i}
+              className="ra-card"
+              style={{ marginBottom: 15, padding: 20 }}
+            >
+              <div
+                onClick={() =>
+                  setFaqOpen(faqOpen === i ? -1 : i)
+                }
+                style={{
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  display: "flex",
+                  justifyContent: "space-between"
+                }}
+              >
+                {faq.q}
+              </div>
+
+              {faqOpen === i && (
+                <p
+                  style={{
+                    marginTop: 12,
+                    color: "var(--text-muted)"
+                  }}
+                >
+                  {faq.a}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+
+/* ---------------------------------------------------------------
    ABOUT PAGE
 ---------------------------------------------------------------- */
 const TEAM = [
