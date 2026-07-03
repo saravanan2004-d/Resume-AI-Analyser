@@ -598,44 +598,174 @@ function SubscriptionPage({ navigate }) {
    ABOUT PAGE
 ---------------------------------------------------------------- */
 const TEAM = [
-  { name: "Rohan Iyer", role: "Founder & CEO", init: "RI" },
-  { name: "Sneha Kapoor", role: "Head of AI", init: "SK" },
-  { name: "Aditya Nair", role: "Head of Product", init: "AN" },
-  { name: "Meera Pillai", role: "Lead Engineer", init: "MP" },
+  {
+    name: "Rohan Iyer",
+    role: "Founder & CEO",
+    image: "/images/rohan.jpg",
+  },
+  {
+    name: "Sneha Kapoor",
+    role: "Head of AI",
+    image: "/images/sneha.jpg",
+  },
+  {
+    name: "Aditya Nair",
+    role: "Head of Product",
+    image: "/images/aditya.jpg",
+  },
+  {
+    name: "Meera Pillai",
+    role: "Lead Engineer",
+    image: "/images/meera.jpg",
+  },
 ];
 
 function AboutPage({ navigate }) {
   return (
     <div>
       <Section style={{ paddingTop: 70 }}>
-        <PageHeader eyebrow="About Us" title="We built the resume screening we wished we had" sub="Resume AI Analyser started with a simple frustration: recruiters spend more time reading resumes than talking to people." />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 22, marginBottom: 60 }}>
+        <PageHeader
+          eyebrow="About Us"
+          title="We built the resume screening we wished we had"
+          sub="Resume AI Analyser started with a simple frustration: recruiters spend more time reading resumes than talking to people."
+        />
+
+        {/* Mission Vision Technology */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+            gap: 22,
+            marginBottom: 60,
+          }}
+        >
           {[
-            { icon: Rocket, title: "Our Mission", desc: "Give every hiring team, from a two-person startup to a 500-person company, recruiter-grade resume analysis in minutes instead of days." },
-            { icon: Layers, title: "Our Vision", desc: "A hiring process where the right candidate is never missed because of screening fatigue, and where feedback to applicants is fast and specific." },
-            { icon: Brain, title: "Our Technology", desc: "A layered AI pipeline — parsing, semantic extraction, and comparative scoring — built to read resumes the way an experienced recruiter would, section by section." },
+            {
+              image: "/images/mission.png",
+              title: "Our Mission",
+              desc: "Give every hiring team, from a two-person startup to a 500-person company, recruiter-grade resume analysis in minutes instead of days.",
+            },
+            {
+              image: "/images/vision.png",
+              title: "Our Vision",
+              desc: "A hiring process where the right candidate is never missed because of screening fatigue, and where feedback to applicants is fast and specific.",
+            },
+            {
+              image: "/images/technology.png",
+              title: "Our Technology",
+              desc: "A layered AI pipeline — parsing, semantic extraction, and comparative scoring — built to read resumes the way an experienced recruiter would, section by section.",
+            },
           ].map((c, i) => (
-            <div key={i} className="ra-card" style={{ borderRadius: 16, padding: 28 }}>
-              <c.icon size={26} color="var(--accent)" style={{ marginBottom: 14 }} />
-              <div className="ra-display" style={{ fontWeight: 600, fontSize: 17, marginBottom: 8 }}>{c.title}</div>
-              <p style={{ color: "var(--text-muted)", fontSize: 14.5, lineHeight: 1.7 }}>{c.desc}</p>
+            <div
+              key={i}
+              className="ra-card"
+              style={{
+                borderRadius: 16,
+                padding: 28,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src={c.image}
+                alt={c.title}
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  objectFit: "contain",
+                  marginBottom: "20px",
+                }}
+              />
+
+              <div
+                className="ra-display"
+                style={{
+                  fontWeight: 600,
+                  fontSize: 17,
+                  marginBottom: 8,
+                }}
+              >
+                {c.title}
+              </div>
+
+              <p
+                style={{
+                  color: "var(--text-muted)",
+                  fontSize: 14.5,
+                  lineHeight: 1.7,
+                }}
+              >
+                {c.desc}
+              </p>
             </div>
           ))}
         </div>
 
+        {/* Team Section */}
         <PageHeader title="The team behind it" />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 20 }}>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+            gap: 20,
+          }}
+        >
           {TEAM.map((t, i) => (
-            <div key={i} className="ra-card" style={{ borderRadius: 16, padding: 24, textAlign: "center" }}>
-              <div style={{ width: 62, height: 62, borderRadius: "50%", background: "linear-gradient(135deg, var(--primary), var(--secondary))", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px", fontWeight: 700, fontSize: 18 }}>{t.init}</div>
+            <div
+              key={i}
+              className="ra-card"
+              style={{
+                borderRadius: 16,
+                padding: 24,
+                textAlign: "center",
+              }}
+            >
+              <img
+                src={t.image}
+                alt={t.name}
+                style={{
+                  width: "90px",
+                  height: "90px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  margin: "0 auto 14px",
+                }}
+              />
+
               <div style={{ fontWeight: 600 }}>{t.name}</div>
-              <div style={{ color: "var(--text-muted)", fontSize: 13 }}>{t.role}</div>
+              <div
+                style={{
+                  color: "var(--text-muted)",
+                  fontSize: 13,
+                }}
+              >
+                {t.role}
+              </div>
             </div>
           ))}
         </div>
 
+        {/* Button */}
         <div style={{ textAlign: "center", marginTop: 56 }}>
-          <button className="ra-btn-primary" style={{ padding: "15px 30px", borderRadius: 12, fontSize: 15.5 }} onClick={() => navigate("contact")}>Get In Touch <ArrowRight size={16} style={{ display: "inline", marginLeft: 6, verticalAlign: -3 }} /></button>
+          <button
+            className="ra-btn-primary"
+            style={{
+              padding: "15px 30px",
+              borderRadius: 12,
+              fontSize: 15.5,
+            }}
+            onClick={() => navigate("contact")}
+          >
+            Get In Touch
+            <ArrowRight
+              size={16}
+              style={{
+                display: "inline",
+                marginLeft: 6,
+                verticalAlign: -3,
+              }}
+            />
+          </button>
         </div>
       </Section>
     </div>
