@@ -357,7 +357,7 @@ function HomePage({ navigate }) {
         <div className="ra-orb" style={{ width: 420, height: 420, background: "var(--accent)", top: 20, right: -180, opacity: 0.14 }} />
         <div style={{ display: "flex", gap: 60, alignItems: "center", flexWrap: "wrap", position: "relative" }}>
           <div style={{ flex: "1 1 480px" }} className="ra-fade-up">
-            <Eyebrow>AI-Powered Hiring Intelligence</Eyebrow>
+            <Eyebrow>AI-Powered Hiring Platform</Eyebrow>
             <h1 className="ra-display" style={{ fontSize: "clamp(34px,5vw,58px)", fontWeight: 800, lineHeight: 1.08, marginBottom: 22 }}>
               AI Powered <span className="ra-grad-text">Resume Ranking</span> Platform
             </h1>
