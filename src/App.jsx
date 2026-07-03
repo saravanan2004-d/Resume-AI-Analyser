@@ -161,7 +161,7 @@ function Navbar({ page, navigate, mobileOpen, setMobileOpen }) {
   ];
   return (
     <div style={{
-      position: "sticky", top: 0, zIndex: 50, padding: "16px 7vw",
+      position: "fixed", top: 0, left: 0, width: "100%", zIndex: 1000,
       display: "flex", alignItems: "center", justifyContent: "space-between",
       borderBottom: "1px solid var(--border)", backdropFilter: "blur(18px)",
       background: "rgba(255,255,255,0.85)"
@@ -502,93 +502,213 @@ function HomePage({ navigate }) {
 /* ---------------------------------------------------------------
    SERVICES PAGE
 ---------------------------------------------------------------- */
-const SERVICES_DETAIL = [
-  { icon: Target, title: "ATS Analysis", tag: "Compatibility", desc: "We simulate exactly how Applicant Tracking Systems like Workday, Greenhouse and Lever parse a resume — checking section structure, file formatting, contact-field detection, and keyword density — so you know a strong candidate won't get silently filtered out before a human ever sees them.", points: ["Section & formatting compatibility check", "Contact field & parsing error detection", "Keyword density against role standards", "Exportable ATS compliance report"] },
-  { icon: BarChart3, title: "Resume Ranking", tag: "Prioritisation", desc: "Every uploaded resume is scored across skills, experience, project relevance, education, and domain fit, then ranked from strongest to weakest match for the specific role and job description you provide — never by keyword count alone.", points: ["Weighted multi-factor scoring model", "Role-specific ranking logic", "Rank list with rationale per candidate", "Re-rank instantly if the JD changes"] },
-  { icon: Users, title: "Resume Comparison", tag: "Head-to-head", desc: "Put any two candidates side by side. We generate a full comparison table — skills, experience, projects, education, and ATS score — with a clear category winner, so shortlisting decisions are backed by evidence, not gut feel.", points: ["Pairwise comparison for every upload", "Category-level winner tags", "Shareable comparison export", "Works across all uploaded resumes at once"] },
-  { icon: TrendingUp, title: "Skill Analysis", tag: "Depth, not keywords", desc: "The AI reads each project and experience bullet to judge how deeply a skill was actually used, not just whether it's listed — separating candidates who built with a technology from candidates who merely mention it.", points: ["Skill depth scoring per candidate", "Tooling & framework extraction", "Cross-resume skill matrix", "Certifications & achievements weighting"] },
-  { icon: Lightbulb, title: "AI Keyword Suggestions", tag: "Optimisation", desc: "For every resume, we surface the exact missing keywords and phrases that recruiters and ATS filters are scanning for in this role — pulled directly from your job description and industry benchmarks.", points: ["Missing keyword list per resume", "Industry-benchmarked phrase suggestions", "Priority-ranked by impact on match score", "One-click copy into resume drafts"] },
-  { icon: Bot, title: "Candidate Insights", tag: "AI assistant", desc: "Ask plain-language questions about your candidate pool — 'who has the strongest cloud experience' or 'which resume best fits a senior role' — and get direct, evidence-backed answers pulled from the full analysis.", points: ["Natural-language Q&A over your resume pool", "Evidence-cited answers", "Improvement suggestions per candidate", "Works across every plan"] },
-];
-
 function ServicesPage({ navigate }) {
-  return (
-    <div>
-      <Section style={{ paddingTop: 70 }}>
-        <PageHeader eyebrow="Services" title="One platform, six ways to hire smarter" sub="Every service below runs automatically on each analysis — there's nothing extra to configure." />
-        <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-          {SERVICES_DETAIL.map((s, i) => (
-            <div key={i} className="ra-card ra-fade-up" style={{ borderRadius: 18, padding: 32, display: "flex", gap: 26, flexWrap: "wrap", animationDelay: `${i * 0.05}s` }}>
-              <div style={{ flex: "0 0 auto" }}>
-                <div style={{ width: 56, height: 56, borderRadius: 14, background: "linear-gradient(135deg, var(--primary), var(--accent))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <s.icon size={26} color="#fff" />
-                </div>
-              </div>
-              <div style={{ flex: "1 1 340px" }}>
-                <span className="ra-chip" style={{ marginBottom: 10, display: "inline-block" }}>{s.tag}</span>
-                <div className="ra-display" style={{ fontSize: 21, fontWeight: 700, marginBottom: 10 }}>{s.title}</div>
-                <p style={{ color: "var(--text-muted)", fontSize: 14.5, lineHeight: 1.7, marginBottom: 16 }}>{s.desc}</p>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 10 }}>
-                  {s.points.map((p, j) => (
-                    <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13.5, color: "var(--text)" }}>
-                      <Check size={15} color="var(--accent)" style={{ marginTop: 2, flexShrink: 0 }} /> {p}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div style={{ textAlign: "center", marginTop: 50 }}>
-          <button className="ra-btn-primary" style={{ padding: "15px 30px", borderRadius: 12, fontSize: 15.5 }} onClick={() => navigate("analyze")}>Try It On Your Resumes <ArrowRight size={16} style={{ display: "inline", marginLeft: 6, verticalAlign: -3 }} /></button>
-        </div>
-      </Section>
-    </div>
-  );
-}
+  const [faqOpen, setFaqOpen] = useState(0);
 
-/* ---------------------------------------------------------------
-   SUBSCRIPTION PAGE
----------------------------------------------------------------- */
-const PLANS = [
-  { name: "Free", price: "₹0", period: "forever", features: ["5 resume uploads / month", "Basic ATS analysis", "Single role comparison", "Email support"], cta: "Start Free", highlight: false },
-  { name: "Pro", price: "₹499", period: "/month", features: ["100 resume uploads / month", "Full AI ranking engine", "Keyword suggestions", "Candidate comparison dashboard", "Priority email support"], cta: "Upgrade to Pro", highlight: true },
-  { name: "Premium", price: "₹999", period: "/month", features: ["Unlimited resume uploads", "Advanced AI analysis suite", "Team access (up to 10 seats)", "AI hiring assistant", "Dedicated support"], cta: "Go Premium", highlight: false },
-];
+  const SERVICES_DETAIL = [
+    {
+      icon: Target,
+      title: "ATS Analysis",
+      tag: "Compatibility",
+      desc: "We simulate exactly how ATS systems parse resumes to ensure candidates pass filtering.",
+      points: [
+        "Section & formatting compatibility check",
+        "Contact field parsing detection",
+        "Keyword density analysis",
+        "ATS compliance report"
+      ]
+    },
+    {
+      icon: BarChart3,
+      title: "Resume Ranking",
+      tag: "Prioritisation",
+      desc: "AI ranks resumes based on skills, experience, and job relevance.",
+      points: [
+        "Multi-factor scoring model",
+        "Role-based ranking",
+        "Candidate ranking list",
+        "Dynamic re-ranking"
+      ]
+    },
+    {
+      icon: Users,
+      title: "Resume Comparison",
+      tag: "Head-to-head",
+      desc: "Compare candidates side by side with clear scoring.",
+      points: [
+        "Pairwise comparison",
+        "Category winner tagging",
+        "Shareable results",
+        "Bulk comparison support"
+      ]
+    },
+    {
+      icon: TrendingUp,
+      title: "Skill Analysis",
+      tag: "Depth analysis",
+      desc: "Evaluates real skill usage depth, not just keywords.",
+      points: [
+        "Skill depth scoring",
+        "Tool extraction",
+        "Skill matrix view",
+        "Certification weighting"
+      ]
+    },
+    {
+      icon: Lightbulb,
+      title: "Keyword Suggestions",
+      tag: "Optimization",
+      desc: "Suggests missing keywords to improve resume match score.",
+      points: [
+        "Missing keyword detection",
+        "Industry benchmarks",
+        "Priority suggestions",
+        "One-click copy support"
+      ]
+    },
+    {
+      icon: Bot,
+      title: "AI Insights",
+      tag: "Smart assistant",
+      desc: "Ask questions about candidates and get AI answers.",
+      points: [
+        "Natural language Q&A",
+        "Evidence-based insights",
+        "Candidate comparison AI",
+        "Cross-resume analysis"
+      ]
+    }
+  ];
 
-function SubscriptionPage({ navigate }) {
+  const FAQS = [
+    {
+      q: "How does ATS analysis work?",
+      a: "We simulate real ATS systems to check formatting, keywords, and parsing accuracy."
+    },
+    {
+      q: "Is resume ranking AI-based?",
+      a: "Yes, ranking is based on skills, experience, and job relevance — not keywords alone."
+    },
+    {
+      q: "Can I compare multiple candidates?",
+      a: "Yes, you can compare all uploaded resumes side by side."
+    },
+    {
+      q: "Do I need setup before using services?",
+      a: "No setup required. Everything works automatically after upload."
+    },
+    {
+      q: "Is this suitable for companies?",
+      a: "Yes, it is built for startups, HR teams, and enterprises."
+    }
+  ];
+
   return (
     <Section style={{ paddingTop: 70 }}>
-      <PageHeader eyebrow="Pricing" title="Simple pricing for teams of every size" sub="Indian pricing, billed in rupees. Upgrade, downgrade, or cancel anytime — no lock-in." />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 24, maxWidth: 1000, margin: "0 auto" }}>
-        {PLANS.map((p, i) => (
-          <div key={i} className="ra-card" style={{
-            borderRadius: 20, padding: 32, position: "relative",
-            border: p.highlight ? "1.5px solid var(--primary-light)" : "1px solid var(--border)",
-            background: p.highlight ? "linear-gradient(160deg, rgba(108,59,255,.14), rgba(0,212,255,.06))" : undefined,
-            transform: p.highlight ? "scale(1.03)" : "none"
-          }}>
-            {p.highlight && <div style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(90deg,var(--primary),var(--secondary))", padding: "5px 16px", borderRadius: 999, fontSize: 12, fontWeight: 700 }}>MOST POPULAR</div>}
-            <div className="ra-display" style={{ fontWeight: 700, fontSize: 20, marginBottom: 6 }}>{p.name}</div>
-            <div style={{ marginBottom: 22 }}>
-              <span className="ra-display" style={{ fontSize: 38, fontWeight: 800 }}>{p.price}</span>
-              <span style={{ color: "var(--text-muted)", fontSize: 14 }}> {p.period}</span>
+      <PageHeader
+        eyebrow="Services"
+        title="One platform, six ways to hire smarter"
+        sub="Everything runs automatically when resumes are uploaded."
+      />
+
+      {/* SERVICES */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+        {SERVICES_DETAIL.map((s, i) => (
+          <div
+            key={i}
+            className="ra-card"
+            style={{
+              borderRadius: 18,
+              padding: 32,
+              display: "flex",
+              gap: 26,
+              flexWrap: "wrap"
+            }}
+          >
+            <div
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: 14,
+                background:
+                  "linear-gradient(135deg, var(--primary), var(--accent))",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <s.icon size={26} color="#fff" />
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28 }}>
-              {p.features.map((f, j) => (
-                <div key={j} style={{ display: "flex", gap: 9, alignItems: "flex-start", fontSize: 14 }}>
-                  <CheckCircle2 size={16} color="var(--accent)" style={{ marginTop: 1, flexShrink: 0 }} /> {f}
-                </div>
-              ))}
+
+            <div style={{ flex: "1 1 340px" }}>
+              <span className="ra-chip">{s.tag}</span>
+
+              <h3 style={{ marginTop: 10 }}>{s.title}</h3>
+
+              <p style={{ color: "var(--text-muted)" }}>{s.desc}</p>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+                  gap: 10
+                }}
+              >
+                {s.points.map((p, j) => (
+                  <div key={j} style={{ display: "flex", gap: 8 }}>
+                    <Check size={15} color="var(--accent)" />
+                    {p}
+                  </div>
+                ))}
+              </div>
             </div>
-            <button className={p.highlight ? "ra-btn-primary" : "ra-btn-secondary"} style={{ width: "100%", padding: "13px", borderRadius: 10, fontSize: 14.5 }} onClick={() => navigate("register")}>
-              {p.cta}
-            </button>
           </div>
         ))}
       </div>
-      <div style={{ textAlign: "center", marginTop: 40, color: "var(--text-muted)", fontSize: 13.5, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-        <ShieldCheck size={16} /> Secure payments powered by Razorpay · GST invoices available on Pro & Premium
+
+      {/* BUTTON */}
+      <div style={{ textAlign: "center", marginTop: 50 }}>
+        <button
+          className="ra-btn-primary"
+          onClick={() => navigate("analyze")}
+        >
+          Try It Now <ArrowRight size={16} />
+        </button>
+      </div>
+
+      {/* FAQ */}
+      <div style={{ marginTop: 60 }}>
+        <PageHeader title="Frequently Asked Questions" />
+
+        <div style={{ marginTop: 25 }}>
+          {FAQS.map((faq, i) => (
+            <div
+              key={i}
+              className="ra-card"
+              style={{ marginBottom: 15, padding: 20 }}
+            >
+              <div
+                onClick={() =>
+                  setFaqOpen(faqOpen === i ? -1 : i)
+                }
+                style={{
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  display: "flex",
+                  justifyContent: "space-between"
+                }}
+              >
+                {faq.q}
+              </div>
+
+              {faqOpen === i && (
+                <p style={{ marginTop: 12, color: "var(--text-muted)" }}>
+                  {faq.a}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </Section>
   );
@@ -776,8 +896,15 @@ function AboutPage({ navigate }) {
    CONTACT PAGE
 ---------------------------------------------------------------- */
 function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [faqOpen, setFaqOpen] = useState(0);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
   const [sent, setSent] = useState(false);
+
   const set = (k, v) => setForm({ ...form, [k]: v });
 
   const submit = (e) => {
@@ -786,69 +913,228 @@ function ContactPage() {
     setSent(true);
   };
 
+  const FAQS = [
+    {
+      q: "How fast will I get a reply?",
+      a: "We usually respond within 24 hours on working days."
+    },
+    {
+      q: "Can I request a demo?",
+      a: "Yes, you can mention 'demo request' in the subject line."
+    },
+    {
+      q: "Do you support partnerships?",
+      a: "Yes, we work with colleges, startups, and companies."
+    },
+    {
+      q: "Where is your team located?",
+      a: "Our team is based in Bengaluru, India."
+    },
+    {
+      q: "Is support free?",
+      a: "Yes, basic support is free for all users."
+    }
+  ];
+
   return (
     <Section style={{ paddingTop: 70 }}>
-      <PageHeader eyebrow="Contact" title="We'd love to hear from you" sub="Questions about a plan, a bug, or a partnership — the team reads every message." />
-      <div style={{ display: "flex", gap: 40, flexWrap: "wrap", maxWidth: 1000, margin: "0 auto" }}>
-        <div style={{ flex: "1 1 320px" }} className="ra-card" style={{ borderRadius: 18, padding: 30 }}>
+      <PageHeader
+        eyebrow="Contact"
+        title="We'd love to hear from you"
+        sub="Questions about a plan, a bug, or a partnership — the team reads every message."
+      />
+
+      <div
+        style={{
+          display: "flex",
+          gap: 40,
+          flexWrap: "wrap",
+          maxWidth: 1000,
+          margin: "0 auto"
+        }}
+      >
+        {/* FORM */}
+        <div
+          className="ra-card"
+          style={{ flex: "1 1 320px", borderRadius: 18, padding: 30 }}
+        >
           {sent ? (
             <div style={{ textAlign: "center", padding: "30px 10px" }}>
-              <CheckCircle2 size={40} color="var(--accent)" style={{ marginBottom: 14 }} />
-              <div className="ra-display" style={{ fontWeight: 700, fontSize: 19, marginBottom: 8 }}>Message sent</div>
-              <p style={{ color: "var(--text-muted)", fontSize: 14 }}>Saved to our team's inbox — expect a reply within 24 hours.</p>
+              <CheckCircle2
+                size={40}
+                color="var(--accent)"
+                style={{ marginBottom: 14 }}
+              />
+              <div
+                className="ra-display"
+                style={{ fontWeight: 700, fontSize: 19, marginBottom: 8 }}
+              >
+                Message sent
+              </div>
+              <p
+                style={{
+                  color: "var(--text-muted)",
+                  fontSize: 14
+                }}
+              >
+                Saved to our team's inbox — expect a reply within 24 hours.
+              </p>
             </div>
           ) : (
-            <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div>
-                <label style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 6, display: "block" }}>Name</label>
-                <input className="ra-input" style={{ width: "100%", padding: "12px 14px", borderRadius: 9, fontSize: 14.5 }} placeholder="Your full name" value={form.name} onChange={e => set("name", e.target.value)} />
-              </div>
-              <div>
-                <label style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 6, display: "block" }}>Email</label>
-                <input className="ra-input" style={{ width: "100%", padding: "12px 14px", borderRadius: 9, fontSize: 14.5 }} placeholder="you@company.com" value={form.email} onChange={e => set("email", e.target.value)} />
-              </div>
-              <div>
-                <label style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 6, display: "block" }}>Subject</label>
-                <input className="ra-input" style={{ width: "100%", padding: "12px 14px", borderRadius: 9, fontSize: 14.5 }} placeholder="What's this about?" value={form.subject} onChange={e => set("subject", e.target.value)} />
-              </div>
-              <div>
-                <label style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 6, display: "block" }}>Message</label>
-                <textarea className="ra-input" rows={5} style={{ width: "100%", padding: "12px 14px", borderRadius: 9, fontSize: 14.5, resize: "vertical" }} placeholder="Tell us more..." value={form.message} onChange={e => set("message", e.target.value)} />
-              </div>
-              <button className="ra-btn-primary" type="submit" style={{ padding: "13px", borderRadius: 10, fontSize: 14.5 }}>Send Message</button>
+            <form
+              onSubmit={submit}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 16
+              }}
+            >
+              <input
+                className="ra-input"
+                placeholder="Your name"
+                value={form.name}
+                onChange={(e) => set("name", e.target.value)}
+              />
+
+              <input
+                className="ra-input"
+                placeholder="Your email"
+                value={form.email}
+                onChange={(e) => set("email", e.target.value)}
+              />
+
+              <input
+                className="ra-input"
+                placeholder="Subject"
+                value={form.subject}
+                onChange={(e) => set("subject", e.target.value)}
+              />
+
+              <textarea
+                className="ra-input"
+                rows={5}
+                placeholder="Message"
+                value={form.message}
+                onChange={(e) => set("message", e.target.value)}
+              />
+
+              <button
+                className="ra-btn-primary"
+                type="submit"
+                style={{
+                  padding: "13px",
+                  borderRadius: 10
+                }}
+              >
+                Send Message
+              </button>
             </form>
           )}
         </div>
 
-        <div style={{ flex: "1 1 280px", display: "flex", flexDirection: "column", gap: 16 }}>
+        {/* CONTACT INFO */}
+        <div
+          style={{
+            flex: "1 1 280px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16
+          }}
+        >
           {[
-            { icon: Mail, label: "Email", val: "hello@resumeai-analyser.com" },
-            { icon: Phone, label: "Phone", val: "+91 98765 43210" },
-            { icon: MapPin, label: "Office", val: "WeWork Prestige Atlanta, Bengaluru, KA 560001" },
+            {
+              icon: Mail,
+              label: "Email",
+              val: "hello@resumeai-analyser.com"
+            },
+            {
+              icon: Phone,
+              label: "Phone",
+              val: "+91 98765 43210"
+            },
+            {
+              icon: MapPin,
+              label: "Office",
+              val: "Bengaluru, India"
+            }
           ].map((c, i) => (
-            <div key={i} className="ra-card" style={{ borderRadius: 14, padding: 20, display: "flex", gap: 14, alignItems: "flex-start" }}>
-              <c.icon size={20} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
+            <div
+              key={i}
+              className="ra-card"
+              style={{
+                borderRadius: 14,
+                padding: 20,
+                display: "flex",
+                gap: 14
+              }}
+            >
+              <c.icon
+                size={20}
+                color="var(--accent)"
+                style={{ marginTop: 2 }}
+              />
               <div>
-                <div style={{ fontSize: 12.5, color: "var(--text-muted)" }}>{c.label}</div>
-                <div style={{ fontSize: 14.5, fontWeight: 500 }}>{c.val}</div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "var(--text-muted)"
+                  }}
+                >
+                  {c.label}
+                </div>
+                <div style={{ fontSize: 14.5 }}>{c.val}</div>
               </div>
             </div>
           ))}
-          <div className="ra-card" style={{ borderRadius: 14, overflow: "hidden", height: 200, position: "relative" }}>
-            <div style={{
-              position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(108,59,255,.25), rgba(0,212,255,.15))",
-              display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 8
-            }}>
-              <MapPin size={26} color="var(--accent)" />
-              <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Map preview — Bengaluru, India</span>
+        </div>
+      </div>
+
+      {/* FAQ SECTION */}
+      <div style={{ marginTop: 60 }}>
+        <PageHeader title="Frequently Asked Questions" />
+
+        <div style={{ marginTop: 25 }}>
+          {FAQS.map((faq, i) => (
+            <div
+              key={i}
+              className="ra-card"
+              style={{
+                marginBottom: 15,
+                padding: 20
+              }}
+            >
+              <div
+                onClick={() =>
+                  setFaqOpen(faqOpen === i ? -1 : i)
+                }
+                style={{
+                  cursor: "pointer",
+                  fontWeight: 600,
+                  display: "flex",
+                  justifyContent: "space-between"
+                }}
+              >
+                {faq.q}
+              </div>
+
+              {faqOpen === i && (
+                <p
+                  style={{
+                    marginTop: 12,
+                    color: "var(--text-muted)",
+                    lineHeight: 1.6
+                  }}
+                >
+                  {faq.a}
+                </p>
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </Section>
   );
 }
-
 /* ---------------------------------------------------------------
    LOGIN / REGISTER
 ---------------------------------------------------------------- */
@@ -1143,11 +1429,23 @@ export default function ResumeAIAnalyser() {
   else content = <HomePage navigate={navigate} />;
 
   return (
-    <div className="ra-root">
-      <GlobalStyle />
-      <Navbar page={page} navigate={navigate} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-      {content}
+  <div className="ra-root" style={{ paddingTop: page === "login" || page === "register" ? "0px" : "90px" }}>
+    <GlobalStyle />
+
+    {page !== "login" && page !== "register" && (
+      <Navbar
+        page={page}
+        navigate={navigate}
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+      />
+    )}
+
+    {content}
+
+    {page !== "login" && page !== "register" && (
       <Footer navigate={navigate} />
-    </div>
-  );
+    )}
+  </div>
+);
 }
